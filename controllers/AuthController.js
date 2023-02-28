@@ -130,7 +130,7 @@ export const ForgotPassword = async (req, res) => {
       message: 'Email tidak tersedia'
     })
   }
-    // console.log(user.id)
+  
     const token = jwt.sign(user.id, process.env.ACCESS_TOKEN_SECRET)
     // console.log(token)
 

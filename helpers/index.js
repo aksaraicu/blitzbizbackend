@@ -1,12 +1,18 @@
 import nodemailer from "nodemailer";
+import dotenv from 'dotenv'
 
-//Using SMTP
+dotenv.config()
+
+// //Using SMTP
 export const kirimEmail = nodemailer.createTransport({   
-    host: 'smtp.mailgun.org',
-        port: 587,
-        secure: false, // true for 465, false for other ports
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_SECURE, // true for 465, false for other ports
     auth: {
-        user: '',
-        pass: ''
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD
     }
+    
+
 })
+
