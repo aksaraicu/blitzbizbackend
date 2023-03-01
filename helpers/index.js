@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-// //Using SMTP
+// Using SMTP
 export const kirimEmail = nodemailer.createTransport({   
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -12,7 +12,12 @@ export const kirimEmail = nodemailer.createTransport({
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD
     }
-    
-
 })
 
+// USING SENDGRID
+// import nodemailerSendgrid from "nodemailer-sendgrid";
+// export const kirimEmail = nodemailer.createTransport(
+//     nodemailerSendgrid({
+//         apiKey: process.env.SENDGRID_API_KEY
+//     })
+// );

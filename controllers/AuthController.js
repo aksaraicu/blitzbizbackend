@@ -127,7 +127,7 @@ export const ForgotPassword = async (req, res) => {
   if(!user) {
     return res.status(401).json({
       status: false,
-      message: 'Email tidak tersedia'
+      message: 'Email ini tidak memiliki akun'
     })
   }
   
@@ -162,6 +162,7 @@ export const ForgotPassword = async (req, res) => {
       message: req.body.email
     })
 
+   
 } 
  
 export const ResetPassword = async (req, res) => {
