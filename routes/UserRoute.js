@@ -10,7 +10,7 @@ import {
 } from "../controllers/UserController.js";
 import { verifyUser, isAdmin } from "../middleware/AuthUser.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
-import { Login, Logout, Me, ForgotPassword } from "../controllers/AuthController.js";
+import { Login, Logout, Me, ForgotPassword, ResetPassword } from "../controllers/AuthController.js";
 
 const router = express.Router();
 
@@ -25,5 +25,6 @@ router.delete("/logout", Logout);
 router.get("/token", refreshToken);
 router.get("/me", Me);
 router.put("/forgotpassword", ForgotPassword)
+router.put("/resetpassword/", ResetPassword)
 
 export default router;

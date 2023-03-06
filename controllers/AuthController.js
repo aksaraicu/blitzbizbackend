@@ -2,6 +2,7 @@ import User from "../models/UserModel.js";
 import UserData from "../models/UserDataModel.js";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
+import { kirimEmail } from "../helpers/index.js";
 
 export const Login = async (req, res) => {
   try {
@@ -113,26 +114,6 @@ export const Me = async (req, res) => {
   res.status(200).json(user);
 };
 
-
-// export const ForgotPassword = async (req, res) => {
-//     const email = req.body.email
-//     try {
-//       const user = await User.findOne({
-//         attributes: ["id", "nama_user", "email_user", "reset_password_link"],
-//         where: {
-//           email_user: email,
-//         }
-//       })
-//       console.log(user)
-//       return res.status(200).json(user)
-
-//     } catch (error) {
-//       res.status(500).json({ msg: error.message });
-//     }
-   
-
-// };
-
 export const ForgotPassword = async (req, res) => {
   const email = req.body.email
   const user = await User.findOne({
@@ -145,10 +126,10 @@ export const ForgotPassword = async (req, res) => {
   if(!user) {
     return res.status(401).json({
       status: false,
-      message: 'Email tidak tersedia'
+      message: 'Email ini tidak memiliki akun'
     })
   }
-    // console.log(user.id)
+  
     const token = jwt.sign(user.id, process.env.ACCESS_TOKEN_SECRET)
     // console.log(token)
 
@@ -162,20 +143,63 @@ export const ForgotPassword = async (req, res) => {
     );
 
     const isiEmail = {
-      from: "Blitbiz Portal",
-      to: email_tujuan,
-      subject: "Link Password Blitbiz Anda",
-      html: `<p>Silahkan link di bawah ini untuk reset password Blitbiz Anda</p>
-             <p>${process.env.CLIENT_URL}/resetpassword/</p>`
+      from: "noreply@blitbiz.com",
+      to: email,
+      subject: "Kesulitan Login ? Silahkan Reset Password Anda",
+      html: `<p>Silahkan klik link di bawah ini untuk reset password akun Blitbiz Anda</p>
+             <p><strong><a href="${process.env.CLIENT_URL}/resetpassword/${token}">Reset Password</a><strong></p>
+             <p>Abaikan pesan ini jika anda tidak membuat permintaan reset password ini.</p>`
     }
+    // console.log(isiEmail)
+    kirimEmail.sendMail(isiEmail, (err, info) =>{
+      if (err) throw err;
+      console.log('Email sent: ' + info.response);
+    })
 
     return res.status(200).json({
       status: true,
       message: req.body.email
     })
 
-  } 
-
-  
+   
+} 
  
-
+export const ResetPassword = async (req, res) => {
+    const {token, password} = req.body
+    console.log('token', token)
+    console.log('password', password)
+    const user = await User.findOne({
+        attributes: ["id", "nama_user", "email_user", "password_user"],
+        where: {
+          reset_password_link: token,
+        }
+      })
+  
+    if(!user) {
+      return res.status(401).json({
+        status: false,
+        message: 'Token tidak valid !'
+      })
+    }
+   
+    const hashPassword = await argon2.hash(password);
+    await User.update(
+      {
+        password_user: hashPassword,
+        reset_password_link: null
+      },
+      {
+        where: {
+          reset_password_link: token,
+        },
+      }
+    );
+    console.log("Password sukses diperbaharui")
+    return res.status(201).json({ msg: "Password sukses diperbaharui" });
+  
+} 
+  
+    
+   
+  
+  
