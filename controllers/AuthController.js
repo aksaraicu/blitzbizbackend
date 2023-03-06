@@ -143,7 +143,7 @@ export const ForgotPassword = async (req, res) => {
     );
 
     const isiEmail = {
-      from: "noreply@blitbiz.com",
+      from: process.env.FROM_EMAIL,
       to: email,
       subject: "Kesulitan Login ? Silahkan Reset Password Anda",
       html: `<p>Silahkan klik link di bawah ini untuk reset password akun Blitbiz Anda</p>
