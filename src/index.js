@@ -22,4 +22,4 @@ app.use(PostRoute);
 app.use(UserRoute);
 app.use(ListingRoute);
 
-app.listen();
+app.listen(process.env.APP_PORT, () => console.log("Server up and running "));
