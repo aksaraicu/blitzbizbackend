@@ -22,4 +22,4 @@ app.use(PostRoute);
 app.use(UserRoute);
 app.use(ListingRoute);
 
-app.listen("5000", () => console.log("Server up and running "));
+app.listen();

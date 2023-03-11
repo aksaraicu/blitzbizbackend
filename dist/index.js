@@ -25,4 +25,4 @@ app.use(_express.default.static("public"));
 app.use(_PostRoute.default);
 app.use(_UserRoute.default);
 app.use(_ListingRoute.default);
-app.listen("5000", () => console.log("Server up and running "));
+app.listen();
